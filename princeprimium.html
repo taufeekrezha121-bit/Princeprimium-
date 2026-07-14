@@ -261,6 +261,66 @@
             font-size: 28px;
         }
 
+        /* --- AI CHATBOT NEW CSS --- */
+        #ai-chat-icon {
+            position: fixed;
+            bottom: 95px; /* WhatsApp button ke thoda upar */
+            right: 20px;
+            background: linear-gradient(135deg, #1a365d, #2b6cb0);
+            color: white;
+            padding: 12px 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            font-weight: bold;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.3s;
+        }
+        #ai-chat-icon:hover { transform: scale(1.05); }
+        #ai-chat-window {
+            position: fixed;
+            bottom: 165px;
+            right: 20px;
+            width: 320px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.3);
+            z-index: 999;
+            overflow: hidden;
+            font-family: inherit;
+            border: 1px solid #e2e8f0;
+        }
+        #ai-chat-header {
+            background: #1a365d;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #ai-chat-header h4 { margin: 0; font-size: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
+        #ai-chat-header button { background: none; border: none; color: white; cursor: pointer; font-weight: bold; font-size: 16px; }
+        #ai-chat-body { padding: 15px; max-height: 320px; overflow-y: auto; background-color: #f7fafc; }
+        .ai-msg { background: #edf2f7; padding: 12px; border-radius: 12px; margin-bottom: 12px; font-size: 14px; color: #2d3748; border-bottom-left-radius: 2px; }
+        .user-reply { background: #ebf8ff; padding: 12px; border-radius: 12px; margin-top: 12px; font-size: 14px; color: #2b6cb0; font-weight: 500; border-bottom-right-radius: 2px; border: 1px solid #bee3f8; }
+        .ai-options { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+        .ai-options button {
+            background: white;
+            border: 1px solid #2b6cb0;
+            color: #2b6cb0;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .ai-options button:hover { background: #2b6cb0; color: white; }
+
         /* Footer */
         footer {
             background: #0f172a;
@@ -285,17 +345,40 @@
 </head>
 <body>
 
+    <!-- Floating WhatsApp Button -->
     <a href="https://wa.me/919339874507?text=Hello%20Prince%20Premium!%20Mujhe%20aapke%20products%20ke%20baare%20mein%20puchna%20hai." class="whatsapp-float" target="_blank" title="Chat on WhatsApp">
         <span>🗪</span>
     </a>
+
+    <!-- AI Chatbot Icon Button -->
+    <div id="ai-chat-icon" onclick="toggleAIChat()">
+        🤖 <span>AI Assistant</span>
+    </div>
+
+    <!-- AI Chatbot Window -->
+    <div id="ai-chat-window" style="display: none;">
+        <div id="ai-chat-header">
+            <h4>Prince Premium AI 👑</h4>
+            <button onclick="toggleAIChat()">X</button>
+        </div>
+        <div id="ai-chat-body">
+            <p class="ai-msg">Namaste! Main Prince Premium ka AI assistant hoon. Aapko aaj kya dekhna hai?</p>
+            <div class="ai-options">
+                <button onclick="aiResponse('trousers')">👖 Sports Trousers Size Guide</button>
+                <button onclick="aiResponse('petticoats')">👗 All Products Catalogue</button>
+                <button onclick="aiResponse('order')">📋 Quick Order Form</button>
+            </div>
+            <div id="ai-reply-zone"></div>
+        </div>
+    </div>
 
     <header>
         <div class="nav-container">
             <div class="logo">Prince<span>Premium</span></div>
             <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#products">Products</a></li>
-                <li><a href="#catalogues">New Catalogues</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="about.html">About Us</a></li>
                 <li><a href="#booking">Order Book</a></li>
             </ul>
         </div>
@@ -438,6 +521,82 @@
     <footer>
         <p>&copy; 2026 <strong>Prince Premium</strong>. Quality Garments Factory. All Rights Reserved.</p>
     </footer>
+
+    <!-- --- AI CHATBOT LOGIC JAVASCRIPT --- -->
+    <script>
+    function toggleAIChat() {
+        var chatWindow = document.getElementById("ai-chat-window");
+        if (chatWindow.style.display === "none") {
+            chatWindow.style.display = "block";
+        } else {
+            chatWindow.style.display = "none";
+        }
+    }
+
+    function aiResponse(type) {
+        var replyZone = document.getElementById("ai-reply-zone");
+        var htmlContent = "";
+        
+        if (type === 'trousers') {
+            htmlContent = `
+                <div class='user-reply'>🤖 <b>AI:</b> Humare Sports Trousers super-stretchable aur heavy fabric se bante hain. Apna waist (कमर) ka size select karein:</div>
+                <div class="ai-options" style="margin-top:10px;">
+                    <button onclick="checkSize(28, 30)">📏 28 - 30 inch (Waist)</button>
+                    <button onclick="checkSize(32, 34)">📏 32 - 34 inch (Waist)</button>
+                    <button onclick="checkSize(36, 40)">📏 36 - 40 inch (Waist)</button>
+                </div>
+            `;
+        } else if (type === 'petticoats') {
+            htmlContent = "<div class='user-reply'>🤖 <b>AI:</b> Humare paas wholesale rate me: <br>1. Sports Trousers 👖<br>2. Premium T-Shirts 👕<br>3. Windcheater Jackets 🧥<br>4. Cotton Petticoats 👗<br><br>Sari items direct factory manufacturing se hain. Order ke liye niche 'Quick Order Form' dabaayein.</div>";
+        } else if (type === 'order') {
+            htmlContent = `
+                <div class='user-reply'>🤖 <b>AI:</b> Kripya details bharein, ye turant mere paas WhatsApp par aa jayegi:</div>
+                <div style="display:flex; flex-direction:column; gap:8px; margin-top:10px; background:#f0f4f8; padding:12px; border-radius:8px; border: 1px solid #cbd5e0;">
+                    <input type="text" id="custName" placeholder="Aapka Naam" style="padding:8px; border:1px solid #cbd5e0; border-radius:4px; width:100%;">
+                    <input type="text" id="custProd" placeholder="Kaun sa product & kitna piece?" style="padding:8px; border:1px solid #cbd5e0; border-radius:4px; width:100%;">
+                    <input type="text" id="custSize" placeholder="Size (M, L, XL, Free Size)" style="padding:8px; border:1px solid #cbd5e0; border-radius:4px; width:100%;">
+                    <button onclick="sendOrderToWhatsApp()" style="background:#25D366; color:white; border:none; padding:10px; border-radius:4px; font-weight:bold; cursor:pointer; width:100%; text-align:center;">🟢 WhatsApp par Send Karein</button>
+                </div>
+            `;
+        }
+        
+        replyZone.innerHTML = htmlContent;
+        var chatBody = document.getElementById("ai-chat-body");
+        chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    function checkSize(min, max) {
+        var replyZone = document.getElementById("ai-reply-zone");
+        var recommendedSize = "M";
+        if(min == 32) recommendedSize = "L";
+        if(min == 36) recommendedSize = "XL / XXL";
+        
+        replyZone.innerHTML += `
+            <div class='user-reply' style='margin-top:10px;'>🤖 <b>AI:</b> Aapke waist ke mutabik <b>Size ${recommendedSize}</b> sabse sahi rahega! 👍</div>
+            <div class="ai-options" style="margin-top:10px;">
+                <button onclick="aiResponse('order')">🛍️ Abhi Order Karein</button>
+            </div>
+        `;
+        var chatBody = document.getElementById("ai-chat-body");
+        chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    function sendOrderToWhatsApp() {
+        var name = document.getElementById("custName").value;
+        var product = document.getElementById("custProd").value;
+        var size = document.getElementById("custSize").value;
+        
+        if(!name || !product || !size) {
+            alert("Kripya saari details bharein!");
+            return;
+        }
+        
+        var myPhoneNumber = "919339874507"; 
+        var message = `Hello Prince Premium!%0A%0AMujhe website se order karna hai:%0A👤 *Naam:* ${name}%0A📦 *Product:* ${product}%0A📏 *Size:* ${size}%0A%0AKripya order confirm karein.`;
+        
+        window.open(`https://wa.me/${myPhoneNumber}?text=${message}`, '_blank');
+    }
+    </script>
 
 </body>
 </html>
